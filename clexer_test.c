@@ -24,10 +24,13 @@ int main(int argc, char** argv) {
     clexer_init(&lexer, &stream);
 
     int token_typ = TOKEN_NULL;
-    char token[1024];
-    while ((token_typ = clexer_get_token(&lexer, token)) != TOKEN_ENDFL) {
+    char token[MAX_TOK_SIZE];
+    while ((token_typ = clexer_get_token(&lexer, token, MAX_TOK_SIZE)) != TOKEN_ENDFL) {
         printf("%d:[%s]\n", token_typ, token);
     }
+
+    clexer_destroy(&lexer);
+    bstream_destroy(&stream);
 
     return 0;
 }

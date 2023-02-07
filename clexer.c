@@ -11,9 +11,6 @@
 #define RES_OK   0
 #define RES_ERR -1
 
-#define MAX_TOK_SIZE 1024
-
-
 #define LEXCONT_UNDEF   0
 #define LEXCONT_WORD    1
 #define LEXCONT_SPACE   2
@@ -53,10 +50,15 @@ void clexer_init(clexer_t * lexer, bstream_t * stream) {
     lexer->letter = bstream_getc(lexer->stream);
 }
 
-int clexer_get_token(clexer_t * lexer, char* token) {
+int clexer_get_token(clexer_t * lexer, char* token, int maxsize) {
     size_t tpos = 0;
 
     while (true) {
+
+        if (tpos > maxsize) {
+             lexer->context = TOKEN_ENDFL;
+             return TOKEN_ENDFL;
+        }
 
         int ltype = get_ltype(lexer->letter);
 
@@ -253,4 +255,7 @@ int clexer_get_token(clexer_t * lexer, char* token) {
         lexer->letter = bstream_getc(lexer->stream);
     }
     return TOKEN_ENDFL;
+}
+
+void clexer_destroy(clexer_t* lexer) {
 }
