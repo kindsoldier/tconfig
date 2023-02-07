@@ -14,11 +14,12 @@
 
 int main(int argc, char** argv) {
 
-    char* src = "key1 = var1 # comment 1\nkey2 = var2 # comment 2 and 3\n# comment 4\n";
+    char* src = " key1 = var1 # comment 1\nkey2 = var2 # comment 2 and 3\n# comment 4\nkey3 = var3";
 
     bstream_t stream;
     bstream_init(&stream);
     bstream_write(&stream, src, strlen(src));
+
 
     clexer_t lexer;
     clexer_init(&lexer, &stream);

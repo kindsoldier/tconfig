@@ -10,6 +10,7 @@
 #include <massert.h>
 
 
+
 void test_rwrite(void) {
     bstream_t stream;
     bstream_init(&stream);
@@ -23,10 +24,10 @@ void test_rwrite(void) {
     }
     printf("wsize = %ld, data = [%s]\n", wsize, stream.data);
 
-    MASSERT(stream.wsize == dsize * count);
+    MASSERT(stream.wpos == dsize * count);
     MASSERT(wsize == dsize * count);
 
-    size_t bsize = bstream_wsize(&stream);
+    size_t bsize = bstream_wpos(&stream);
     char* buf = malloc(bsize + 1);
     memset(buf, 0, bsize + 1);
 

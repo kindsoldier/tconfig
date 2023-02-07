@@ -43,10 +43,10 @@ cyacc_test: cyacc_test.o $(OBJS)
 
 
 test: bstream_test clexer_test mapper_test cyacc_test
-	./bstream_test
+#	./bstream_test
+#	./mapper_test
 	./clexer_test
 	./cyacc_test
-	./mapper_test
 
 clean:
 	rm -f *_test

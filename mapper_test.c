@@ -12,20 +12,21 @@
 
 int main(int argc, char **argv) {
 
-    int   port   = 0;
-    bool  flag   = false;
-    char* ident  = NULL;
 
     mapper_t mapper;
     mapper_init(&mapper);
+
+    int   port   = 0;
+    bool  flag   = false;
+    char* ident  = NULL;
 
     mapper_bind_integer(&mapper, "port", &port);
     mapper_bind_string(&mapper, "ident", &ident);
     mapper_bind_bool(&mapper, "flag", &flag);
 
-    mapper_set_int(&mapper, "port", "12345");
-    mapper_set_string(&mapper, "ident", "qwerty");
-    mapper_set_bool(&mapper, "flag", "true");
+    mapper_set(&mapper, "port", "12345");
+    mapper_set(&mapper, "ident", "qwerty");
+    mapper_set(&mapper, "flag", "true");
 
     printf("port = %d\n", port);
     MASSERT(port = 12345);

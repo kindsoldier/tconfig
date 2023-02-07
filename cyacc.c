@@ -14,6 +14,7 @@
 
 #include <clexer.h>
 #include <cyacc.h>
+#include <mapper.h>
 
 #define RES_OK   0
 #define RES_ERR -1
@@ -31,8 +32,20 @@ static char* strcopy(char* src) {
     return dst;
 }
 
-void cyacc_init(cyacc_t * yacc, clexer_t * lexer) {
+cyacc_t * new_cyacc(clexer_t * lexer, mapper_t* mapper) {
+    cyacc_t *yacc = malloc(sizeof(cyacc_t));
+    if (yacc == NULL) return NULL;
     yacc->lexer = lexer;
+    yacc->mapper = mapper;
+    yacc->pos = 0;
+    yacc->lnum = 0;
+    return yacc;
+}
+
+
+void cyacc_init(cyacc_t * yacc, clexer_t * lexer, mapper_t* mapper) {
+    yacc->lexer = lexer;
+    yacc->mapper = mapper;
     yacc->pos = 0;
     yacc->lnum = 0;
 }
@@ -42,9 +55,10 @@ int cyacc_parse(cyacc_t * yacc) {
     int toktype = -1;
     clexer_t* lexer =  yacc->lexer;
     char* key = NULL;
-    char* var = NULL;
+    char* val = NULL;
 
-    while ((toktype = clexer_get_token(lexer, token, MAX_TOK_SIZE)) != TOKEN_ENDFL) {
+    while (true) {
+        toktype = clexer_get_token(lexer, token, MAX_TOK_SIZE);
         if (toktype == TOKEN_SPACE) {
             continue;
         }
@@ -82,23 +96,28 @@ int cyacc_parse(cyacc_t * yacc) {
                     return -1;
                 }
                 yacc->pos++;
-                var = strcopy(token);
+                val = strcopy(token);
                 break;
             }
             case 3: {
-                if (toktype != TOKEN_NEWLN) {
+                if (toktype != TOKEN_NEWLN && toktype != TOKEN_ENDFL) {
                     return -1;
                 }
                 yacc->pos = 0;
-                printf("(let %s %s)\n", key, var);
+                mapper_set(yacc->mapper, key, val);
                 free(key);
-                free(var);
+                free(val);
                 break;
             }
         }
+        if (toktype == TOKEN_ENDFL) break;
     }
     return 0;
 }
 
 void cyacc_destroy(cyacc_t* yacc) {
+}
+
+void cyacc_free(cyacc_t* yacc) {
+    free(yacc);
 }

@@ -21,7 +21,7 @@ static char* copystr(char* src) {
 #define MAPPER_INTEGER  2
 #define MAPPER_BOOL     3
 
-mlink_t* new_mlink_string(char* name, char** val) {
+static mlink_t* new_mlink_string(char* name, char** val) {
     mlink_t* mlink = malloc(sizeof(mlink_t));
     mlink->name = name;
     mlink->vptr = (void*)val;
@@ -29,7 +29,7 @@ mlink_t* new_mlink_string(char* name, char** val) {
     return mlink;
 }
 
-mlink_t* new_mlink_integer(char* name, int* val) {
+static mlink_t* new_mlink_integer(char* name, int* val) {
     mlink_t* mlink = malloc(sizeof(mlink_t));
     mlink->name = name;
     mlink->vptr = (void*)val;
@@ -37,7 +37,7 @@ mlink_t* new_mlink_integer(char* name, int* val) {
     return mlink;
 }
 
-mlink_t* new_mlink_bool(char* name, bool* val) {
+static mlink_t* new_mlink_bool(char* name, bool* val) {
     mlink_t* mlink = malloc(sizeof(mlink_t));
     mlink->name = name;
     mlink->vptr = (void*)val;
@@ -47,6 +47,19 @@ mlink_t* new_mlink_bool(char* name, bool* val) {
 
 
 #define MAPPER_INITCAPA 64
+
+
+mapper_t* new_mapper() {
+    mapper_t* mapper = malloc(sizeof(mapper_t));
+    if (mapper == NULL) return NULL;
+    mapper->mlinks = malloc(sizeof(mlink_t) * MAPPER_INITCAPA);
+    mapper->capa = MAPPER_INITCAPA;
+    mapper->size = 0;
+    mapper->err = false;
+    mapper->errstr = NULL;
+    return mapper;
+}
+
 
 void mapper_init(mapper_t* mapper) {
     mapper->mlinks = malloc(sizeof(mlink_t) * MAPPER_INITCAPA);
@@ -141,6 +154,13 @@ int mapper_set_bool(mapper_t* mapper, char* key, char* val) {
     return 0;
 }
 
+int mapper_set(mapper_t* mapper, char* key, char* val) {
+    mapper_set_int(mapper, key, val);
+    mapper_set_string(mapper, key, val);
+    mapper_set_bool(mapper, key, val);
+    return 0;
+}
+
 void mapper_destroy(mapper_t* mapper) {
     if (mapper != NULL) {
         for (size_t i = 0; i < mapper->size; i++) {
@@ -151,3 +171,13 @@ void mapper_destroy(mapper_t* mapper) {
     return;
 }
 
+void mapper_free(mapper_t* mapper) {
+    if (mapper != NULL) {
+        for (size_t i = 0; i < mapper->size; i++) {
+            free(mapper->mlinks[i]);
+        }
+        free(mapper->mlinks);
+    }
+    free(mapper);
+    return;
+}

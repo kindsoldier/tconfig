@@ -11,6 +11,7 @@ typedef struct {
     bstream_t* stream;
     int context;
     char letter;
+    int pos;
 } clexer_t;
 
 #define MAX_TOK_SIZE 1024
@@ -23,8 +24,9 @@ typedef struct {
 #define TOKEN_ENDFL     5
 #define TOKEN_NEWLN     7
 
+clexer_t* new_clexer(bstream_t * stream);
 void clexer_init(clexer_t * clexer, bstream_t * stream);
 int clexer_get_token(clexer_t * clexer, char* token, int maxsize);
 void clexer_destroy(clexer_t* lexer);
-
+void clexer_free(clexer_t* lexer);
 #endif

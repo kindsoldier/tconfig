@@ -21,10 +21,6 @@ typedef struct {
 #define MAPPER_INTEGER  2
 #define MAPPER_BOOL     3
 
-mlink_t* new_mlink_string(char* name, char** val);
-mlink_t* new_mlink_integer(char* name, int* val);
-mlink_t* new_mlink_bool(char* name, bool* val);
-
 typedef struct {
     mlink_t**   mlinks;
     size_t      size;
@@ -42,6 +38,7 @@ int mapper_bind_bool(mapper_t* mapper, char* name, bool* val);
 int mapper_set_int(mapper_t* mapper, char* key, char* val);
 int mapper_set_string(mapper_t* mapper, char* key, char* val);
 int mapper_set_bool(mapper_t* mapper, char* key, char* val);
+int mapper_set(mapper_t* mapper, char* key, char* val);
 
 void mapper_destroy(mapper_t* mapper);
 
