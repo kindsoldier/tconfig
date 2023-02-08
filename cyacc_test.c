@@ -1,9 +1,6 @@
 /*
- *
  * Copyright 2023 Oleg Borodin  <borodin@unix7.org>
- *
  */
-
 
 #include <stdint.h>
 #include <stdlib.h>
@@ -19,7 +16,7 @@
 #include <massert.h>
 
 
-int main(int argc, char** argv) {
+int main(void) {
 
     char* src = "key1 = var1 # comment 1\nkey2 = var2 # comment 2 and 3\n# comment 4\nkey3 = var3";
 
@@ -42,7 +39,7 @@ int main(int argc, char** argv) {
     bool  flag   = false;
     char* ident  = NULL;
 
-    mapper_bind_integer(&mapper, "port", &port);
+    mapper_bind_int(&mapper, "port", &port);
     mapper_bind_string(&mapper, "ident", &ident);
     mapper_bind_bool(&mapper, "flag", &flag);
 
@@ -57,21 +54,19 @@ int main(int argc, char** argv) {
     }
 
     printf("port = %d\n", port);
-    MASSERT(port = 12345);
+    MASSERT(port == 12345);
 
     printf("ident = %s\n", ident);
     MASSERT(strcmp(ident, "qwerty") == 0);
     free(ident);
 
     printf("flag = %d\n", flag);
-    MASSERT(flag = true);
+    MASSERT(flag == true);
 
     cyacc_destroy(&yacc);
     clexer_destroy(&lexer);
     mapper_destroy(&mapper);
     bstream_destroy(&stream);
-
-    free(ident);
 
     return 0;
 }

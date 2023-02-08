@@ -20,10 +20,11 @@ typedef struct {
 
 bstream_t* new_bstream();
 bstream_t* bstream_init(bstream_t * stream);
-ssize_t bstream_dump(bstream_t * stream);
-ssize_t bstream_write(bstream_t * stream, void* buf, ssize_t size);
-ssize_t bstream_read(bstream_t * stream, void* buf, ssize_t size);
+size_t bstream_dump(bstream_t * stream);
+ssize_t bstream_write(bstream_t * stream, void* buf, size_t size);
+ssize_t bstream_read(bstream_t * stream, void* buf, size_t size);
 
+ssize_t bstream_fread(bstream_t * stream, char* filename);
 char bstream_getc(bstream_t * stream);
 
 size_t bstream_wpos(bstream_t * stream);

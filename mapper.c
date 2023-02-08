@@ -17,15 +17,13 @@ static char* copystr(char* src) {
     return dest;
 }
 
-#define MAPPER_STRING   1
-#define MAPPER_INTEGER  2
-#define MAPPER_BOOL     3
+
 
 static mlink_t* new_mlink_string(char* name, char** val) {
     mlink_t* mlink = malloc(sizeof(mlink_t));
     mlink->name = name;
     mlink->vptr = (void*)val;
-    mlink->type = MAPPER_STRING;
+    mlink->type = MAPPER_STR;
     return mlink;
 }
 
@@ -33,7 +31,7 @@ static mlink_t* new_mlink_integer(char* name, int* val) {
     mlink_t* mlink = malloc(sizeof(mlink_t));
     mlink->name = name;
     mlink->vptr = (void*)val;
-    mlink->type = MAPPER_INTEGER;
+    mlink->type = MAPPER_INT;
     return mlink;
 }
 
@@ -49,7 +47,7 @@ static mlink_t* new_mlink_bool(char* name, bool* val) {
 #define MAPPER_INITCAPA 64
 
 
-mapper_t* new_mapper() {
+mapper_t* new_mapper(void) {
     mapper_t* mapper = malloc(sizeof(mapper_t));
     if (mapper == NULL) return NULL;
     mapper->mlinks = malloc(sizeof(mlink_t) * MAPPER_INITCAPA);
@@ -95,7 +93,7 @@ int mapper_bind_string(mapper_t* mapper, char* name, char** val) {
     return RES_BIND_OK;
 }
 
-int mapper_bind_integer(mapper_t* mapper, char* name, int* val) {
+int mapper_bind_int(mapper_t* mapper, char* name, int* val) {
     int res = 0;
     if ((res = mapper_check_capa(mapper)) != RES_BIND_OK) {
         return res;
@@ -121,7 +119,7 @@ int mapper_bind_bool(mapper_t* mapper, char* name, bool* val) {
 int mapper_set_int(mapper_t* mapper, char* key, char* val) {
     for (size_t i = 0; i < mapper->size; i++) {
         mlink_t* mlink = mapper->mlinks[i];
-        if (mlink->type == MAPPER_INTEGER && strcmp(mlink->name, key) == 0) {
+        if (mlink->type == MAPPER_INT && strcmp(mlink->name, key) == 0) {
             char* eptr = NULL;
             *(int*)(mlink->vptr) = (int)strtol(val, &eptr, 10);
         }
@@ -132,7 +130,7 @@ int mapper_set_int(mapper_t* mapper, char* key, char* val) {
 int mapper_set_string(mapper_t* mapper, char* key, char* val) {
     for (size_t i = 0; i < mapper->size; i++) {
         mlink_t* mlink = mapper->mlinks[i];
-        if (mlink->type == MAPPER_STRING && strcmp(mlink->name, key) == 0) {
+        if (mlink->type == MAPPER_STR && strcmp(mlink->name, key) == 0) {
             *(char**)(mlink->vptr) = copystr(val);
         }
     }
@@ -153,6 +151,23 @@ int mapper_set_bool(mapper_t* mapper, char* key, char* val) {
     }
     return 0;
 }
+
+int mapper_bind(mapper_t* mapper, int type, char* name, void* val) {
+    switch (type) {
+        case MAPPER_STR: {
+            return mapper_bind_string(mapper, name, (char**)val);
+        }
+        case MAPPER_INT: {
+            return mapper_bind_int(mapper, name, (int*)val);
+        }
+        case MAPPER_BOOL: {
+            return mapper_bind_bool(mapper, name, (bool*)val);
+        }
+    }
+    return 0;
+}
+
+
 
 int mapper_set(mapper_t* mapper, char* key, char* val) {
     mapper_set_int(mapper, key, val);
@@ -179,5 +194,4 @@ void mapper_free(mapper_t* mapper) {
         free(mapper->mlinks);
     }
     free(mapper);
-    return;
 }

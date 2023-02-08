@@ -65,6 +65,10 @@ void clexer_init(clexer_t * lexer, bstream_t * stream) {
 int clexer_get_token(clexer_t * lexer, char* token, int maxsize) {
     lexer->pos = 0;
 
+    if (lexer->pos > (maxsize - 1)) {
+        return -2;
+    }
+
     if (lexer->context == LEXCONT_UNDEF) {
         lexer->letter = bstream_getc(lexer->stream);
     }
@@ -266,6 +270,7 @@ int clexer_get_token(clexer_t * lexer, char* token, int maxsize) {
 }
 
 void clexer_destroy(clexer_t* lexer) {
+    (void)lexer;
 }
 
 void clexer_free(clexer_t* lexer) {

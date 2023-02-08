@@ -104,6 +104,7 @@ int cyacc_parse(cyacc_t * yacc) {
                     return -1;
                 }
                 yacc->pos = 0;
+                printf("keyval = [%s], [%s]\n", key, val);
                 mapper_set(yacc->mapper, key, val);
                 free(key);
                 free(val);
@@ -116,6 +117,7 @@ int cyacc_parse(cyacc_t * yacc) {
 }
 
 void cyacc_destroy(cyacc_t* yacc) {
+    (void)yacc;
 }
 
 void cyacc_free(cyacc_t* yacc) {

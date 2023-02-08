@@ -11,7 +11,8 @@
 #include <massert.h>
 
 int main(int argc, char **argv) {
-
+    (void)argc;
+    (void)argv;
 
     mapper_t mapper;
     mapper_init(&mapper);
@@ -20,7 +21,7 @@ int main(int argc, char **argv) {
     bool  flag   = false;
     char* ident  = NULL;
 
-    mapper_bind_integer(&mapper, "port", &port);
+    mapper_bind_int(&mapper, "port", &port);
     mapper_bind_string(&mapper, "ident", &ident);
     mapper_bind_bool(&mapper, "flag", &flag);
 

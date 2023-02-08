@@ -12,7 +12,7 @@
 #include <bstream.h>
 #include <clexer.h>
 
-int main(int argc, char** argv) {
+int main(void) {
 
     char* src = " key1 = var1 # comment 1\nkey2 = var2 # comment 2 and 3\n# comment 4\nkey3 = var3";
 

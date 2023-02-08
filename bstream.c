@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include <fcntl.h>
 
 #include <bstream.h>
 
@@ -31,7 +32,7 @@ bstream_t* new_bstream() {
     return stream;
 }
 
-ssize_t bstream_dump(bstream_t * stream) {
+size_t bstream_dump(bstream_t * stream) {
     for (size_t i = 0; i < stream->wpos; i++) {
         printf("%c", stream->data[i]);
     }
@@ -39,22 +40,21 @@ ssize_t bstream_dump(bstream_t * stream) {
 }
 
 
-ssize_t bstream_write(bstream_t * stream, void* buf, ssize_t size) {
+ssize_t bstream_write(bstream_t * stream, void* buf, size_t size) {
     if ((stream->wpos + size) > stream->capa) {
         size_t newcapa = stream->capa * 2;
-        stream->data = realloc(stream->data, newcapa);
+        stream->data = realloc(stream->data, (size_t)newcapa);
         stream->capa = newcapa;
     }
     if (buf != NULL) {
-        memcpy(&(stream->data[stream->wpos]), buf, size);
+        memcpy(&(stream->data[stream->wpos]), buf, (size_t)size);
     }
     stream->wpos += size;
-    return size;
+    return (ssize_t)size;
 }
 
-ssize_t bstream_read(bstream_t * stream, void* buf, ssize_t size) {
+ssize_t bstream_read(bstream_t * stream, void* buf, size_t size) {
     size_t unread = stream->wpos - stream->rpos;
-
     if (size > unread) {
         size = unread;
     }
@@ -62,7 +62,33 @@ ssize_t bstream_read(bstream_t * stream, void* buf, ssize_t size) {
         memcpy(buf, &(stream->data[stream->rpos]), size);
     }
     stream->rpos += size;
-    return size;
+    return (ssize_t)size;
+}
+
+#define RBUF_SIZE 64
+
+ssize_t bstream_fread(bstream_t * stream, char* filename) {
+
+    int fd = open(filename, O_RDONLY);
+    if (fd < 0) return (ssize_t)-1;
+
+    char buf[RBUF_SIZE];
+    size_t size = 0;
+    size_t rsize = 0;
+    while ((size = (size_t)read(fd, buf, RBUF_SIZE)) > 0) {
+        if ((stream->wpos + size) > stream->capa) {
+            size_t newcapa = stream->capa * 2;
+            stream->data = realloc(stream->data, (size_t)newcapa);
+            stream->capa = newcapa;
+        }
+        if (buf != NULL) {
+            memcpy(&(stream->data[stream->wpos]), buf, (size_t)size);
+        }
+        stream->wpos += size;
+        rsize += size;
+    }
+    close(fd);
+    return (ssize_t)rsize;
 }
 
 char bstream_getc(bstream_t * stream) {
@@ -70,7 +96,7 @@ char bstream_getc(bstream_t * stream) {
 
     if (unread == 0)
         return EOF;
-    return stream->data[stream->rpos++];
+    return (char)stream->data[stream->rpos++];
 }
 
 
