@@ -14,7 +14,7 @@
 
 #include <clexer.h>
 #include <cyacc.h>
-#include <mapper.h>
+#include <vmapper.h>
 
 #define RES_OK   0
 #define RES_ERR -1
@@ -32,20 +32,20 @@ static char* strcopy(char* src) {
     return dst;
 }
 
-cyacc_t * new_cyacc(clexer_t * lexer, mapper_t* mapper) {
+cyacc_t * new_cyacc(clexer_t * lexer, vmapper_t* vmapper) {
     cyacc_t *yacc = malloc(sizeof(cyacc_t));
     if (yacc == NULL) return NULL;
     yacc->lexer = lexer;
-    yacc->mapper = mapper;
+    yacc->vmapper = vmapper;
     yacc->pos = 0;
     yacc->lnum = 0;
     return yacc;
 }
 
 
-void cyacc_init(cyacc_t * yacc, clexer_t * lexer, mapper_t* mapper) {
+void cyacc_init(cyacc_t * yacc, clexer_t * lexer, vmapper_t* vmapper) {
     yacc->lexer = lexer;
-    yacc->mapper = mapper;
+    yacc->vmapper = vmapper;
     yacc->pos = 0;
     yacc->lnum = 0;
 }
@@ -105,7 +105,7 @@ int cyacc_parse(cyacc_t * yacc) {
                 }
                 yacc->pos = 0;
                 printf("keyval = [%s], [%s]\n", key, val);
-                mapper_set(yacc->mapper, key, val);
+                vmapper_set(yacc->vmapper, key, val);
                 free(key);
                 free(val);
                 break;

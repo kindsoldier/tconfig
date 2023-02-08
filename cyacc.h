@@ -6,17 +6,17 @@
 #define CYACC_H_QWERTY
 
 #include <clexer.h>
-#include <mapper.h>
+#include <vmapper.h>
 
 typedef struct {
     clexer_t* lexer;
-    mapper_t* mapper;
+    vmapper_t* vmapper;
     int pos;
     int lnum;
 } cyacc_t;
 
-cyacc_t * new_cyacc(clexer_t * lexer, mapper_t* mapper);
-void cyacc_init(cyacc_t* yacc, clexer_t* lexer, mapper_t* mapper);
+cyacc_t * new_cyacc(clexer_t * lexer, vmapper_t* vmapper);
+void cyacc_init(cyacc_t* yacc, clexer_t* lexer, vmapper_t* vmapper);
 int cyacc_parse(cyacc_t* yacc);
 void cyacc_destroy(cyacc_t* yacc);
 void cyacc_free(cyacc_t* yacc);

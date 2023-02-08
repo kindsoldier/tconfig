@@ -11,7 +11,7 @@
 
 typedef struct {
     bstream_t*  stream;
-    mapper_t*   mapper;
+    vmapper_t*   vmapper;
     cyacc_t*    yacc;
     clexer_t*   lexer;
 } tconfig_t;

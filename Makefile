@@ -36,8 +36,8 @@ massert.o: massert.c
 clexer.c: clexer.h
 clexer.o: clexer.c
 
-mapper.c: mapper.h
-mapper.o: mapper.c
+vmapper.c: vmapper.h
+vmapper.o: vmapper.c
 
 cyacc.c: cyacc.h
 cyacc.o: cyacc.c
@@ -46,7 +46,7 @@ tconfig.c: tconfig.h
 tconfig.o: tconfig.c
 
 
-OBJS = bstream.o massert.o clexer.o mapper.o cyacc.o
+OBJS = bstream.o massert.o clexer.o vmapper.o cyacc.o
 OBJS += tconfig.o
 
 bstream_test: bstream_test.o $(OBJS)
@@ -55,8 +55,8 @@ bstream_test: bstream_test.o $(OBJS)
 clexer_test: clexer_test.o $(OBJS)
 	$(CC) $(LDFLAGS) -o $@ clexer_test.o $(OBJS)
 
-mapper_test: mapper_test.o $(OBJS)
-	$(CC) $(LDFLAGS) -o $@ mapper_test.o $(OBJS)
+vmapper_test: vmapper_test.o $(OBJS)
+	$(CC) $(LDFLAGS) -o $@ vmapper_test.o $(OBJS)
 
 cyacc_test: cyacc_test.o $(OBJS)
 	$(CC) $(LDFLAGS) -o $@ cyacc_test.o $(OBJS)
@@ -65,12 +65,12 @@ tconfig_test: tconfig_test.o $(OBJS)
 	$(CC) $(LDFLAGS) -o $@ tconfig_test.o $(OBJS)
 
 
-TESTS = bstream_test clexer_test mapper_test cyacc_test
+TESTS = bstream_test clexer_test vmapper_test cyacc_test
 TESTS += tconfig_test
 
 test: $(TESTS)
 #	./bstream_test
-#	./mapper_test
+#	./vmapper_test
 #	./clexer_test
 #	./cyacc_test
 	./tconfig_test

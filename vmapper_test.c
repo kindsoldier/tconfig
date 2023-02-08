@@ -7,27 +7,27 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <mapper.h>
+#include <vmapper.h>
 #include <massert.h>
 
 int main(int argc, char **argv) {
     (void)argc;
     (void)argv;
 
-    mapper_t mapper;
-    mapper_init(&mapper);
+    vmapper_t vmapper;
+    vmapper_init(&vmapper);
 
     int   port   = 0;
     bool  flag   = false;
     char* ident  = NULL;
 
-    mapper_bind_int(&mapper, "port", &port);
-    mapper_bind_string(&mapper, "ident", &ident);
-    mapper_bind_bool(&mapper, "flag", &flag);
+    vmapper_bind_int(&vmapper, "port", &port);
+    vmapper_bind_string(&vmapper, "ident", &ident);
+    vmapper_bind_bool(&vmapper, "flag", &flag);
 
-    mapper_set(&mapper, "port", "12345");
-    mapper_set(&mapper, "ident", "qwerty");
-    mapper_set(&mapper, "flag", "true");
+    vmapper_set(&vmapper, "port", "12345");
+    vmapper_set(&vmapper, "ident", "qwerty");
+    vmapper_set(&vmapper, "flag", "true");
 
     printf("port = %d\n", port);
     MASSERT(port = 12345);
@@ -39,7 +39,7 @@ int main(int argc, char **argv) {
     printf("flag = %d\n", flag);
     MASSERT(flag = true);
 
-    mapper_destroy(&mapper);
+    vmapper_destroy(&vmapper);
 
     return 0;
 }

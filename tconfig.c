@@ -8,19 +8,19 @@
 #include <clexer.h>
 #include <cyacc.h>
 #include <bstream.h>
-#include <mapper.h>
+#include <vmapper.h>
 #include <tconfig.h>
 
 void tconfig_init(tconfig_t* tconfig) {
     tconfig->stream = new_bstream();
-    tconfig->mapper = new_mapper();
+    tconfig->vmapper = new_vmapper();
     tconfig->lexer = new_clexer(tconfig->stream);
-    tconfig->yacc = new_cyacc(tconfig->lexer, tconfig->mapper);
+    tconfig->yacc = new_cyacc(tconfig->lexer, tconfig->vmapper);
 }
 
 int tconfig_bind(tconfig_t* tconfig, int type, char* name, void* ptr) {
-    mapper_t* mapper = tconfig->mapper;
-    return mapper_bind(mapper, type, name, ptr);
+    vmapper_t* vmapper = tconfig->vmapper;
+    return vmapper_bind(vmapper, type, name, ptr);
 }
 
 ssize_t tconfig_read(tconfig_t* tconfig, char* filename) {
@@ -37,5 +37,5 @@ void tconfig_destroy(tconfig_t* tconfig) {
     cyacc_free(tconfig->yacc);
     clexer_free(tconfig->lexer);
     bstream_free(tconfig->stream);
-    mapper_free(tconfig->mapper);
+    vmapper_free(tconfig->vmapper);
 }

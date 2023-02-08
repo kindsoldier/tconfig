@@ -12,7 +12,7 @@
 #include <bstream.h>
 #include <clexer.h>
 #include <cyacc.h>
-#include <mapper.h>
+#include <vmapper.h>
 #include <massert.h>
 
 
@@ -27,11 +27,11 @@ int main(void) {
     clexer_t lexer;
     clexer_init(&lexer, &stream);
 
-    mapper_t mapper;
-    mapper_init(&mapper);
+    vmapper_t vmapper;
+    vmapper_init(&vmapper);
 
     cyacc_t yacc;
-    cyacc_init(&yacc, &lexer, &mapper);
+    cyacc_init(&yacc, &lexer, &vmapper);
 
     bstream_write(&stream, src, strlen(src));
 
@@ -39,13 +39,13 @@ int main(void) {
     bool  flag   = false;
     char* ident  = NULL;
 
-    mapper_bind_int(&mapper, "port", &port);
-    mapper_bind_string(&mapper, "ident", &ident);
-    mapper_bind_bool(&mapper, "flag", &flag);
+    vmapper_bind_int(&vmapper, "port", &port);
+    vmapper_bind_string(&vmapper, "ident", &ident);
+    vmapper_bind_bool(&vmapper, "flag", &flag);
 
-    mapper_set(&mapper, "port", "12345");
-    mapper_set(&mapper, "ident", "qwerty");
-    mapper_set(&mapper, "flag", "true");
+    vmapper_set(&vmapper, "port", "12345");
+    vmapper_set(&vmapper, "ident", "qwerty");
+    vmapper_set(&vmapper, "flag", "true");
 
     int res = cyacc_parse(&yacc);
 
@@ -65,7 +65,7 @@ int main(void) {
 
     cyacc_destroy(&yacc);
     clexer_destroy(&lexer);
-    mapper_destroy(&mapper);
+    vmapper_destroy(&vmapper);
     bstream_destroy(&stream);
 
     return 0;
