@@ -30,8 +30,8 @@ int main(void) {
     vmapper_t vmapper;
     vmapper_init(&vmapper);
 
-    tccomp_t yacc;
-    tccomp_init(&yacc, &lexer, &vmapper);
+    tccomp_t comp;
+    tccomp_init(&comp, &lexer, &vmapper);
 
     bstream_write(&stream, src, strlen(src));
 
@@ -47,10 +47,10 @@ int main(void) {
     vmapper_set(&vmapper, "ident", "qwerty");
     vmapper_set(&vmapper, "flag", "true");
 
-    int res = tccomp_parse(&yacc);
+    int res = tccomp_parse(&comp);
 
     if (res < 0) {
-        printf("parsing error pos %d line %d\n", yacc.pos, yacc.lnum);
+        printf("parsing error pos %d line %d\n", comp.pos, comp.lnum);
     }
 
     printf("port = %d\n", port);
@@ -63,7 +63,7 @@ int main(void) {
     printf("flag = %d\n", flag);
     MASSERT(flag == true);
 
-    tccomp_destroy(&yacc);
+    tccomp_destroy(&comp);
     tclexer_destroy(&lexer);
     vmapper_destroy(&vmapper);
     bstream_destroy(&stream);

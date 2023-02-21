@@ -16,9 +16,9 @@ typedef struct {
 } tccomp_t;
 
 tccomp_t * new_tccomp(tclexer_t * lexer, vmapper_t* vmapper);
-void tccomp_init(tccomp_t* yacc, tclexer_t* lexer, vmapper_t* vmapper);
-int tccomp_parse(tccomp_t* yacc);
-void tccomp_destroy(tccomp_t* yacc);
-void tccomp_free(tccomp_t* yacc);
+void tccomp_init(tccomp_t* comp, tclexer_t* lexer, vmapper_t* vmapper);
+int tccomp_parse(tccomp_t* comp);
+void tccomp_destroy(tccomp_t* comp);
+void tccomp_free(tccomp_t* comp);
 
 #endif

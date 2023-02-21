@@ -33,27 +33,27 @@ static char* strcopy(char* src) {
 }
 
 tccomp_t * new_tccomp(tclexer_t * lexer, vmapper_t* vmapper) {
-    tccomp_t *yacc = malloc(sizeof(tccomp_t));
-    if (yacc == NULL) return NULL;
-    yacc->lexer = lexer;
-    yacc->vmapper = vmapper;
-    yacc->pos = 0;
-    yacc->lnum = 0;
-    return yacc;
+    tccomp_t *comp = malloc(sizeof(tccomp_t));
+    if (comp == NULL) return NULL;
+    comp->lexer = lexer;
+    comp->vmapper = vmapper;
+    comp->pos = 0;
+    comp->lnum = 0;
+    return comp;
 }
 
 
-void tccomp_init(tccomp_t * yacc, tclexer_t * lexer, vmapper_t* vmapper) {
-    yacc->lexer = lexer;
-    yacc->vmapper = vmapper;
-    yacc->pos = 0;
-    yacc->lnum = 0;
+void tccomp_init(tccomp_t * comp, tclexer_t * lexer, vmapper_t* vmapper) {
+    comp->lexer = lexer;
+    comp->vmapper = vmapper;
+    comp->pos = 0;
+    comp->lnum = 0;
 }
 
-int tccomp_parse(tccomp_t * yacc) {
+int tccomp_parse(tccomp_t * comp) {
     char token[MAX_TOK_SIZE];
     int toktype = -1;
-    tclexer_t* lexer =  yacc->lexer;
+    tclexer_t* lexer =  comp->lexer;
     char* key = NULL;
     char* val = NULL;
 
@@ -65,22 +65,22 @@ int tccomp_parse(tccomp_t * yacc) {
         if (toktype == TOKEN_COMM) {
             continue;
         }
-        //printf("tok=%d pos=%d line=%d [%s]\n", toktype, yacc->pos, yacc->lnum, token);
+        //printf("tok=%d pos=%d line=%d [%s]\n", toktype, comp->pos, comp->lnum, token);
 
         if (toktype == TOKEN_NEWLN) {
-            yacc->lnum++;
+            comp->lnum++;
         }
 
-        switch (yacc->pos) {
+        switch (comp->pos) {
             case 0: {
                 if (toktype == TOKEN_NEWLN) {
-                    yacc->pos = 0;
+                    comp->pos = 0;
                     break;
                 }
                 if (toktype != TOKEN_WORD) {
                     return -1;
                 }
-                yacc->pos++;
+                comp->pos++;
                 key = strcopy(token);
                 break;
             }
@@ -88,14 +88,14 @@ int tccomp_parse(tccomp_t * yacc) {
                 if (toktype != TOKEN_OPER) {
                     return -1;
                 }
-                yacc->pos++;
+                comp->pos++;
                 break;
             }
             case 2: {
                 if (toktype != TOKEN_WORD) {
                     return -1;
                 }
-                yacc->pos++;
+                comp->pos++;
                 val = strcopy(token);
                 break;
             }
@@ -103,9 +103,9 @@ int tccomp_parse(tccomp_t * yacc) {
                 if (toktype != TOKEN_NEWLN && toktype != TOKEN_ENDFL) {
                     return -1;
                 }
-                yacc->pos = 0;
+                comp->pos = 0;
                 printf("keyval = [%s], [%s]\n", key, val);
-                vmapper_set(yacc->vmapper, key, val);
+                vmapper_set(comp->vmapper, key, val);
                 free(key);
                 free(val);
                 break;
@@ -116,10 +116,10 @@ int tccomp_parse(tccomp_t * yacc) {
     return 0;
 }
 
-void tccomp_destroy(tccomp_t* yacc) {
-    (void)yacc;
+void tccomp_destroy(tccomp_t* comp) {
+    (void)comp;
 }
 
-void tccomp_free(tccomp_t* yacc) {
-    free(yacc);
+void tccomp_free(tccomp_t* comp) {
+    free(comp);
 }

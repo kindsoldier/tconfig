@@ -78,12 +78,12 @@ TESTS = bstream_test tclexer_test vmapper_test tccomp_test
 TESTS += tconfig_test galexer_test gclexer_test
 
 test: $(TESTS)
-#	./bstream_test
-#	./vmapper_test
-#	./tclexer_test
-#	./tccomp_test
-#	./tconfig_test
-#	./galexer_test
+	./bstream_test
+	./vmapper_test
+	./tclexer_test
+	./tccomp_test
+	./tconfig_test
+	./galexer_test
 	./gclexer_test
 
 clean:

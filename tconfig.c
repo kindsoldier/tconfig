@@ -12,30 +12,30 @@
 #include <tconfig.h>
 
 void tconfig_init(tconfig_t* tconfig) {
-    tconfig->stream = new_bstream();
-    tconfig->vmapper = new_vmapper();
-    tconfig->lexer = new_tclexer(tconfig->stream);
-    tconfig->yacc = new_tccomp(tconfig->lexer, tconfig->vmapper);
+    bstream_init(&(tconfig->stream));
+    vmapper_init(&(tconfig->mapper));
+    tclexer_init(&(tconfig->lexer), &(tconfig->stream));
+    tccomp_init(&(tconfig->comp), &(tconfig->lexer), &(tconfig->mapper));
 }
 
 int tconfig_bind(tconfig_t* tconfig, int type, char* name, void* ptr) {
-    vmapper_t* vmapper = tconfig->vmapper;
+    vmapper_t* vmapper = &(tconfig->mapper);
     return vmapper_bind(vmapper, type, name, ptr);
 }
 
 ssize_t tconfig_read(tconfig_t* tconfig, char* filename) {
-    bstream_t* stream = tconfig->stream;
+    bstream_t* stream = &(tconfig->stream);
     return bstream_fread(stream, filename);
 }
 
 int tconfig_parse(tconfig_t* tconfig) {
 
-    return tccomp_parse(tconfig->yacc);
+    return tccomp_parse(&(tconfig->comp));
 }
 
 void tconfig_destroy(tconfig_t* tconfig) {
-    tccomp_free(tconfig->yacc);
-    tclexer_free(tconfig->lexer);
-    bstream_free(tconfig->stream);
-    vmapper_free(tconfig->vmapper);
+    tccomp_destroy(&(tconfig->comp));
+    tclexer_destroy(&(tconfig->lexer));
+    bstream_destroy(&(tconfig->stream));
+    vmapper_destroy(&(tconfig->mapper));
 }
