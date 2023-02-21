@@ -10,7 +10,6 @@ CFLAGS += -Wpedantic -Wall -Wextra
 CFLAGS += -Wbool-compare -Wbool-operation
 CFLAGS += -Wint-in-bool-context
 CFLAGS += -Wuninitialized
-
 CFLAGS += -Wcast-align
 CFLAGS += -Wcast-qual
 CFLAGS += -Wconversion
@@ -45,9 +44,8 @@ tccomp.o: tccomp.c
 tconfig.c: tconfig.h
 tconfig.o: tconfig.c
 
-
 OBJS = bstream.o massert.o tclexer.o vmapper.o tccomp.o
-OBJS += tconfig.o
+OBJS += tconfig.o galexer.o gclexer.o
 
 bstream_test: bstream_test.o $(OBJS)
 	$(CC) $(LDFLAGS) -o $@ bstream_test.o $(OBJS)
@@ -65,16 +63,28 @@ tconfig_test: tconfig_test.o $(OBJS)
 	$(CC) $(LDFLAGS) -o $@ tconfig_test.o $(OBJS)
 
 
+galexer.c: galexer.h
+galexer.o: galexer.c
+galexer_test: galexer_test.o $(OBJS)
+	$(CC) $(LDFLAGS) -o $@ galexer_test.o $(OBJS)
+
+gclexer.c: gclexer.h
+gclexer.o: gclexer.c
+gclexer_test: gclexer_test.o $(OBJS)
+	$(CC) $(LDFLAGS) -o $@ gclexer_test.o $(OBJS)
+
+
 TESTS = bstream_test tclexer_test vmapper_test tccomp_test
-TESTS += tconfig_test
+TESTS += tconfig_test galexer_test gclexer_test
 
 test: $(TESTS)
 #	./bstream_test
 #	./vmapper_test
 #	./tclexer_test
 #	./tccomp_test
-	./tconfig_test
-
+#	./tconfig_test
+#	./galexer_test
+	./gclexer_test
 
 clean:
 	rm -f *_test
