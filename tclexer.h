@@ -2,8 +2,8 @@
  * Copyright 2023 Oleg Borodin  <borodin@unix7.org>
  */
 
-#ifndef CLEXER_H_QWERTY
-#define CLEXER_H_QWERTY
+#ifndef TCLEXER_H_QWERTY
+#define TCLEXER_H_QWERTY
 
 #include <bstream.h>
 
@@ -12,7 +12,7 @@ typedef struct {
     int context;
     char letter;
     int pos;
-} clexer_t;
+} tclexer_t;
 
 #define MAX_TOK_SIZE 1024
 
@@ -24,9 +24,9 @@ typedef struct {
 #define TOKEN_ENDFL     5
 #define TOKEN_NEWLN     7
 
-clexer_t* new_clexer(bstream_t * stream);
-void clexer_init(clexer_t * clexer, bstream_t * stream);
-int clexer_get_token(clexer_t * clexer, char* token, int maxsize);
-void clexer_destroy(clexer_t* lexer);
-void clexer_free(clexer_t* lexer);
+tclexer_t* new_tclexer(bstream_t * stream);
+void tclexer_init(tclexer_t * tclexer, bstream_t * stream);
+int tclexer_get_token(tclexer_t * tclexer, char* token, int maxsize);
+void tclexer_destroy(tclexer_t* lexer);
+void tclexer_free(tclexer_t* lexer);
 #endif

@@ -5,15 +5,15 @@
 
 #include <stdio.h>
 
-#include <clexer.h>
-#include <cyacc.h>
+#include <tclexer.h>
+#include <tccomp.h>
 #include <bstream.h>
 
 typedef struct {
     bstream_t*  stream;
     vmapper_t*   vmapper;
-    cyacc_t*    yacc;
-    clexer_t*   lexer;
+    tccomp_t*    yacc;
+    tclexer_t*   lexer;
 } tconfig_t;
 
 #define TCONF_STR    MAPPER_STR

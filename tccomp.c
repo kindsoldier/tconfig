@@ -12,8 +12,8 @@
 #include <string.h>
 #include <stdio.h>
 
-#include <clexer.h>
-#include <cyacc.h>
+#include <tclexer.h>
+#include <tccomp.h>
 #include <vmapper.h>
 
 #define RES_OK   0
@@ -32,8 +32,8 @@ static char* strcopy(char* src) {
     return dst;
 }
 
-cyacc_t * new_cyacc(clexer_t * lexer, vmapper_t* vmapper) {
-    cyacc_t *yacc = malloc(sizeof(cyacc_t));
+tccomp_t * new_tccomp(tclexer_t * lexer, vmapper_t* vmapper) {
+    tccomp_t *yacc = malloc(sizeof(tccomp_t));
     if (yacc == NULL) return NULL;
     yacc->lexer = lexer;
     yacc->vmapper = vmapper;
@@ -43,22 +43,22 @@ cyacc_t * new_cyacc(clexer_t * lexer, vmapper_t* vmapper) {
 }
 
 
-void cyacc_init(cyacc_t * yacc, clexer_t * lexer, vmapper_t* vmapper) {
+void tccomp_init(tccomp_t * yacc, tclexer_t * lexer, vmapper_t* vmapper) {
     yacc->lexer = lexer;
     yacc->vmapper = vmapper;
     yacc->pos = 0;
     yacc->lnum = 0;
 }
 
-int cyacc_parse(cyacc_t * yacc) {
+int tccomp_parse(tccomp_t * yacc) {
     char token[MAX_TOK_SIZE];
     int toktype = -1;
-    clexer_t* lexer =  yacc->lexer;
+    tclexer_t* lexer =  yacc->lexer;
     char* key = NULL;
     char* val = NULL;
 
     while (true) {
-        toktype = clexer_get_token(lexer, token, MAX_TOK_SIZE);
+        toktype = tclexer_get_token(lexer, token, MAX_TOK_SIZE);
         if (toktype == TOKEN_SPACE) {
             continue;
         }
@@ -116,10 +116,10 @@ int cyacc_parse(cyacc_t * yacc) {
     return 0;
 }
 
-void cyacc_destroy(cyacc_t* yacc) {
+void tccomp_destroy(tccomp_t* yacc) {
     (void)yacc;
 }
 
-void cyacc_free(cyacc_t* yacc) {
+void tccomp_free(tccomp_t* yacc) {
     free(yacc);
 }

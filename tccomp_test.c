@@ -10,8 +10,8 @@
 #include <stdio.h>
 
 #include <bstream.h>
-#include <clexer.h>
-#include <cyacc.h>
+#include <tclexer.h>
+#include <tccomp.h>
 #include <vmapper.h>
 #include <massert.h>
 
@@ -24,14 +24,14 @@ int main(void) {
 
     bstream_init(&stream);
 
-    clexer_t lexer;
-    clexer_init(&lexer, &stream);
+    tclexer_t lexer;
+    tclexer_init(&lexer, &stream);
 
     vmapper_t vmapper;
     vmapper_init(&vmapper);
 
-    cyacc_t yacc;
-    cyacc_init(&yacc, &lexer, &vmapper);
+    tccomp_t yacc;
+    tccomp_init(&yacc, &lexer, &vmapper);
 
     bstream_write(&stream, src, strlen(src));
 
@@ -47,7 +47,7 @@ int main(void) {
     vmapper_set(&vmapper, "ident", "qwerty");
     vmapper_set(&vmapper, "flag", "true");
 
-    int res = cyacc_parse(&yacc);
+    int res = tccomp_parse(&yacc);
 
     if (res < 0) {
         printf("parsing error pos %d line %d\n", yacc.pos, yacc.lnum);
@@ -63,8 +63,8 @@ int main(void) {
     printf("flag = %d\n", flag);
     MASSERT(flag == true);
 
-    cyacc_destroy(&yacc);
-    clexer_destroy(&lexer);
+    tccomp_destroy(&yacc);
+    tclexer_destroy(&lexer);
     vmapper_destroy(&vmapper);
     bstream_destroy(&stream);
 

@@ -10,7 +10,7 @@
 #include <stdio.h>
 
 #include <bstream.h>
-#include <clexer.h>
+#include <tclexer.h>
 
 int main(void) {
 
@@ -21,16 +21,16 @@ int main(void) {
     bstream_write(&stream, src, strlen(src));
 
 
-    clexer_t lexer;
-    clexer_init(&lexer, &stream);
+    tclexer_t lexer;
+    tclexer_init(&lexer, &stream);
 
     int token_typ = TOKEN_NULL;
     char token[MAX_TOK_SIZE];
-    while ((token_typ = clexer_get_token(&lexer, token, MAX_TOK_SIZE)) != TOKEN_ENDFL) {
+    while ((token_typ = tclexer_get_token(&lexer, token, MAX_TOK_SIZE)) != TOKEN_ENDFL) {
         printf("%d:[%s]\n", token_typ, token);
     }
 
-    clexer_destroy(&lexer);
+    tclexer_destroy(&lexer);
     bstream_destroy(&stream);
 
     return 0;

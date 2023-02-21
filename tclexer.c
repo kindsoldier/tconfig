@@ -7,7 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include <clexer.h>
+#include <tclexer.h>
 
 #define RES_OK   0
 #define RES_ERR -1
@@ -45,24 +45,22 @@ static int get_ltype(char letter) {
     return LTYPE_LETTER;
 }
 
-clexer_t* new_clexer(bstream_t * stream) {
-    clexer_t* lexer = malloc(sizeof(clexer_t));
+tclexer_t* new_tclexer(bstream_t * stream) {
+    tclexer_t* lexer = malloc(sizeof(tclexer_t));
     if (lexer == NULL) return NULL;
     lexer->stream = stream;
     lexer->context = LEXCONT_UNDEF;
-    //lexer->letter = bstream_getc(lexer->stream);
-
     return lexer;
 }
 
 
-void clexer_init(clexer_t * lexer, bstream_t * stream) {
+void tclexer_init(tclexer_t * lexer, bstream_t * stream) {
     lexer->stream = stream;
     lexer->context = LEXCONT_UNDEF;
     lexer->pos = 0;
 }
 
-int clexer_get_token(clexer_t * lexer, char* token, int maxsize) {
+int tclexer_get_token(tclexer_t * lexer, char* token, int maxsize) {
     lexer->pos = 0;
 
     if (lexer->pos > (maxsize - 1)) {
@@ -269,10 +267,10 @@ int clexer_get_token(clexer_t * lexer, char* token, int maxsize) {
     return TOKEN_ENDFL;
 }
 
-void clexer_destroy(clexer_t* lexer) {
+void tclexer_destroy(tclexer_t* lexer) {
     (void)lexer;
 }
 
-void clexer_free(clexer_t* lexer) {
+void tclexer_free(tclexer_t* lexer) {
     free(lexer);
 }
